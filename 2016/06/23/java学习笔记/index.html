@@ -1,0 +1,683 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="随看随记面向对象的特点
+抽象：抽象是一边忽略一个主题中与当前目标无关的因素，一方面充分考虑有关的内容。抽象并不能解决目标中所有的问题，只能选择其中的一部分，忽略其他的部分，抽象包含两个方面：一是过程抽象；一是数据抽象。
+继承：继承是一种连接类的层次模型，允许和鼓励类的重用，提供了一种明确的共性的方法。对象的一个新类可以从现有的类中派生，这叫做类的继承。新类继承了原始类的特性，新类称为原始类的派生类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="六木">
+<meta property="og:url" content="http://yoursite.com/2016/06/23/java学习笔记/index.html">
+<meta property="og:site_name" content="六木">
+<meta property="og:description" content="随看随记面向对象的特点
+抽象：抽象是一边忽略一个主题中与当前目标无关的因素，一方面充分考虑有关的内容。抽象并不能解决目标中所有的问题，只能选择其中的一部分，忽略其他的部分，抽象包含两个方面：一是过程抽象；一是数据抽象。
+继承：继承是一种连接类的层次模型，允许和鼓励类的重用，提供了一种明确的共性的方法。对象的一个新类可以从现有的类中派生，这叫做类的继承。新类继承了原始类的特性，新类称为原始类的派生类">
+<meta property="og:updated_time" content="2016-07-08T08:52:23.121Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="六木">
+<meta name="twitter:description" content="随看随记面向对象的特点
+抽象：抽象是一边忽略一个主题中与当前目标无关的因素，一方面充分考虑有关的内容。抽象并不能解决目标中所有的问题，只能选择其中的一部分，忽略其他的部分，抽象包含两个方面：一是过程抽象；一是数据抽象。
+继承：继承是一种连接类的层次模型，允许和鼓励类的重用，提供了一种明确的共性的方法。对象的一个新类可以从现有的类中派生，这叫做类的继承。新类继承了原始类的特性，新类称为原始类的派生类">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>  | 六木 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">六木</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">君子之泽，五世而斩</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-23T22:11:20+08:00" content="2016-06-23">
+              2016-06-23
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="随看随记"><a href="#随看随记" class="headerlink" title="随看随记"></a>随看随记</h1><h2 id="面向对象的特点"><a href="#面向对象的特点" class="headerlink" title="面向对象的特点"></a>面向对象的特点</h2><ol>
+<li>抽象：<br>抽象是一边忽略一个主题中与当前目标无关的因素，一方面充分考虑有关的内容。抽象并不能解决目标中所有的问题，只能选择其中的一部分，忽略其他的部分，抽象包含两个方面：一是过程抽象；一是数据抽象。</li>
+<li>继承：<br>继承是一种连接类的层次模型，允许和鼓励类的重用，提供了一种明确的共性的方法。对象的一个新类可以从现有的类中派生，这叫做类的继承。新类继承了原始类的特性，新类称为原始类的派生类或者是子类，原始类称为新类的基类或者父类。 子类可以从父类那里继承弗雷德方法和实现变量，并允许新类增加和修改新的方法使之满足需求。</li>
+<li>封装：<br>封装就是把过程和数据包围起来。对数据的访问只是允许通过已经定义好的界面。面向对象就是基于这个概念，即现实世界可以描述为一系列完全自治封装的对象，这些对象通过固定受保护的接口访问其他对象。</li>
+<li>多态：<br>多态性是指不同类的对象对同一个请求作出响应。多态性包括参数多态和包含多态。多态性语言具有灵活、抽象、行为共享、代码共享的优势。很好的解决了应用程序中同名的问题。</li>
+</ol>
+<h2 id="serialVersionUID的作用"><a href="#serialVersionUID的作用" class="headerlink" title="serialVersionUID的作用"></a>serialVersionUID的作用</h2><p>简单来说，Java的序列化机制是通过在运行时判断类的serialVersionUID来验证版本一致性的。在进行反序列化时，JVM会把传来的字节流中的serialVersionUID与本地相应实体（类）的serialVersionUID进行比较，如果相同就认为是一致的，可以进行反序列化，否则就会出现序列化版本不一致的异常。(InvalidCastException)。具体的解释参考链接。<a href="http://blog.csdn.net/kakaxi_77/article/details/8129070" target="_blank" rel="external">serialVersionUID的作用以及设置方法</a></p>
+<h2 id="Intel-IDEA-使用指南"><a href="#Intel-IDEA-使用指南" class="headerlink" title="Intel IDEA 使用指南"></a>Intel IDEA 使用指南</h2><p><a href="https://github.com/judasn/IntelliJ-IDEA-Tutorial" target="_blank" rel="external">https://github.com/judasn/IntelliJ-IDEA-Tutorial</a> </p>
+<ol>
+<li>版本控制<br><a href="https://github.com/judasn/IntelliJ-IDEA-Tutorial/blob/newMaster/vcs-introduce.md" target="_blank" rel="external">https://github.com/judasn/IntelliJ-IDEA-Tutorial/blob/newMaster/vcs-introduce.md</a></li>
+</ol>
+<h2 id="JAVA-中-extends-和-implements-的区别"><a href="#JAVA-中-extends-和-implements-的区别" class="headerlink" title="JAVA 中 extends 和 implements 的区别"></a>JAVA 中 extends 和 implements 的区别</h2><p>extends是继承父类，只要那个类不是声明为final或者那个类定义为abstract的就能继承，JAVA中不支持多重继承，但是可以用接口来实现，这样就要用到implements，继承只能继承一个类，但implements可以实现多个接口，用逗号分开就行了<br>比如<br>class A extends B implements C,D,E</p>
+<p>List&lt;?extends Object&gt; //表示泛型是Object类型或者继承致Object的类型<br>List<object> //表示泛型是Object类型</object></p>
+<h2 id="Java-List-遍历"><a href="#Java-List-遍历" class="headerlink" title="Java List 遍历"></a>Java List 遍历</h2><p>List<string> list = new ArrayList<string>();<br>long t1,t2;<br>for(int j = 0; j &lt; 10000000; j++)<br>    {<br>        list.add(“aaaaaa” + j);<br>    }</string></string></p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>for(String tmp:list)<br>{<br>    //System.out.println(tmp);<br>}</p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>for(int i = 0; i &lt; list.size(); i++)<br>{<br>    list.get(i);<br>    //System.out.println(list.get(i));<br>}  </p>
+<h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h3><p>Iterator<string> iter = list.iterator();<br>while(iter.hasNext())<br>{<br>    iter.next();<br>    //System.out.println(iter.next());<br>}    </string></p>
+<h2 id="Java-Bean"><a href="#Java-Bean" class="headerlink" title="Java Bean"></a>Java Bean</h2><p>JavaBean 是一种JAVA语言写成的可重用组件。为写成JavaBean，类必须是具体的和公共的，并且具有无参数的构造器。JavaBean 通过提供符合一致性设计模式的公共方法将内部域暴露成员属性，set和get方法获取。众所周知，属性名称符合这种模式，其他Java 类可以通过自省机制发现和操作这些JavaBean 的属性。</p>
+<p>用户可以使用JavaBean将功能、处理、值、数据库访问和其他任何可以用java代码创造的对象进行打包，并且其他的开发者可以通过内部的JSP页面、Servlet、其他JavaBean、applet程序或者应用来使用这些对象。用户可以认为JavaBean提供了一种随时随地的复制和粘贴的功能，而不用关心任何改变。</p>
+<p>一个 JavaBean 由3部分组成，属性方法和事件。</p>
+<h2 id="Java-instanceof-用法"><a href="#Java-instanceof-用法" class="headerlink" title="Java instanceof 用法"></a>Java instanceof 用法</h2><p>java 中的instanceof 运算符是用来在运行时指出对象是否是特定类的一个实例。instanceof通过返回一个布尔值来指出，这个对象是否是这个特定类或者是它的子类的一个实例。<br>用法：result = object instanceof class<br>参数：<br>Result：布尔类型。<br>Object：必选项。任意对象表达式。<br>Class：必选项。任意已定义的对象类。<br>说明：如果 object 是 class 的一个实例，则 instanceof 运算符返回 true。如果 object 不是指定类的一个实例，或者 object 是 null，则返回 false。</p>
+<h2 id="Java-AtomicInteger"><a href="#Java-AtomicInteger" class="headerlink" title="Java AtomicInteger"></a>Java AtomicInteger</h2><p>AtomicInteger，一个提供原子操作的Integer的类。在Java语言中，++i和i++操作并不是线程安全的，在使用的时候，不可避免的会用到synchronized关键字。而AtomicInteger则通过一种线程安全的加减操作接口。</p>
+<h2 id="Java-Full-GC"><a href="#Java-Full-GC" class="headerlink" title="Java Full GC"></a>Java Full GC</h2><p><a href="http://www.blogjava.net/ldwblog/archive/2013/07/24/401919.html" target="_blank" rel="external">http://www.blogjava.net/ldwblog/archive/2013/07/24/401919.html</a></p>
+<h2 id="Java-Transient"><a href="#Java-Transient" class="headerlink" title="Java Transient"></a>Java Transient</h2><p>transient是java语言的关键字，变量修饰符，如果用它声明一个实例变量，当对象存储时，它的值不需要维持。<br>在java中一个对象只要实现了Serilizable接口，这个对象就可以被序列化，java的这种序列化模式为开发者提供了很多便利，我们可以不必关系具体序列化的过程，只要这个类实现了Serilizable接口，这个类的所有属性和方法都会自动序列化。</p>
+<p>然而在实际开发过程中，我们常常会遇到这样的问题，这个类的有些属性需要序列化，而其他属性不需要被序列化，诚然，你可以让这个类来实现Externalizable接口，这个接口是Serilizable的子接口，但是你必须实现readExternal和writeExternal方法，你可以在这两个方法中实现具体属性的反序列化和序列化操作。然而这就意味着你必须在这两个方法中手工编写额外的代码来进行具体属性的序列化。这时transient就派上用场了，你只需要实现Serilizable接口，将不需要序列化的属性前添加关键字transient，序列化对象的时候，这个属性就不会序列化到指定的目的地中。而在struts源码中，ActionForm也确实是implement了Serilizable接口。</p>
+<h2 id="String-StringBuffer与StringBuilder的区别"><a href="#String-StringBuffer与StringBuilder的区别" class="headerlink" title="String,StringBuffer与StringBuilder的区别"></a>String,StringBuffer与StringBuilder的区别</h2><p><a href="http://blog.csdn.net/rmn190/article/details/1492013" target="_blank" rel="external">http://blog.csdn.net/rmn190/article/details/1492013</a></p>
+<h2 id="Java语言中synchronized-修饰在-static方法和-非static方法的区别"><a href="#Java语言中synchronized-修饰在-static方法和-非static方法的区别" class="headerlink" title="Java语言中synchronized 修饰在 static方法和 非static方法的区别"></a>Java语言中synchronized 修饰在 static方法和 非static方法的区别</h2><p><a href="http://blog.csdn.net/virgoboy2004/article/details/7585182" target="_blank" rel="external">http://blog.csdn.net/virgoboy2004/article/details/7585182</a></p>
+<h2 id="LinkedBlockingDeque-双向并发阻塞队列"><a href="#LinkedBlockingDeque-双向并发阻塞队列" class="headerlink" title="LinkedBlockingDeque 双向并发阻塞队列"></a>LinkedBlockingDeque 双向并发阻塞队列</h2><p><a href="http://www.cnblogs.com/linjiqin/p/3214725.html" target="_blank" rel="external">http://www.cnblogs.com/linjiqin/p/3214725.html</a><br><a href="http://blog.csdn.net/vernonzheng/article/details/8267541" target="_blank" rel="external">http://blog.csdn.net/vernonzheng/article/details/8267541</a></p>
+<h2 id="Java-MAP-遍历"><a href="#Java-MAP-遍历" class="headerlink" title="Java MAP 遍历"></a>Java MAP 遍历</h2><p><a href="http://blog.csdn.net/tjcyjd/article/details/11111401" target="_blank" rel="external">http://blog.csdn.net/tjcyjd/article/details/11111401</a></p>
+<h2 id="Java-单元测试"><a href="#Java-单元测试" class="headerlink" title="Java 单元测试"></a>Java 单元测试</h2><p><a href="http://www.jianshu.com/p/7088822e21a3#" target="_blank" rel="external">http://www.jianshu.com/p/7088822e21a3#</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/23/读程序员的思维修炼/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/24/tair学习/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o86r9i8nc.bkt.clouddn.com/%E6%8D%95%E8%8E%B7.PNG"
+               alt="yuansen du" />
+          <p class="site-author-name" itemprop="name">yuansen du</p>
+          <p class="site-description motion-element" itemprop="description">做最好的自己</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dysenustc" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#随看随记"><span class="nav-number">1.</span> <span class="nav-text">随看随记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象的特点"><span class="nav-number">1.1.</span> <span class="nav-text">面向对象的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#serialVersionUID的作用"><span class="nav-number">1.2.</span> <span class="nav-text">serialVersionUID的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Intel-IDEA-使用指南"><span class="nav-number">1.3.</span> <span class="nav-text">Intel IDEA 使用指南</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA-中-extends-和-implements-的区别"><span class="nav-number">1.4.</span> <span class="nav-text">JAVA 中 extends 和 implements 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-List-遍历"><span class="nav-number">1.5.</span> <span class="nav-text">Java List 遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一"><span class="nav-number">1.5.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二"><span class="nav-number">1.5.2.</span> <span class="nav-text">方法二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法三"><span class="nav-number">1.5.3.</span> <span class="nav-text">方法三</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Bean"><span class="nav-number">1.6.</span> <span class="nav-text">Java Bean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-instanceof-用法"><span class="nav-number">1.7.</span> <span class="nav-text">Java instanceof 用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-AtomicInteger"><span class="nav-number">1.8.</span> <span class="nav-text">Java AtomicInteger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Full-GC"><span class="nav-number">1.9.</span> <span class="nav-text">Java Full GC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Transient"><span class="nav-number">1.10.</span> <span class="nav-text">Java Transient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-StringBuffer与StringBuilder的区别"><span class="nav-number">1.11.</span> <span class="nav-text">String,StringBuffer与StringBuilder的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java语言中synchronized-修饰在-static方法和-非static方法的区别"><span class="nav-number">1.12.</span> <span class="nav-text">Java语言中synchronized 修饰在 static方法和 非static方法的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedBlockingDeque-双向并发阻塞队列"><span class="nav-number">1.13.</span> <span class="nav-text">LinkedBlockingDeque 双向并发阻塞队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-MAP-遍历"><span class="nav-number">1.14.</span> <span class="nav-text">Java MAP 遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-单元测试"><span class="nav-number">1.15.</span> <span class="nav-text">Java 单元测试</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yuansen du</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

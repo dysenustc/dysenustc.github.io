@@ -1,0 +1,695 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="CentOS 安装 RocketMQ
+安装git(非必须)：yum install git 安装 git 
+下载安装java：从oracle 网站上用 wget 下载命令:(下载版本可以更改)--no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelice">
+<meta property="og:type" content="article">
+<meta property="og:title" content="六木">
+<meta property="og:url" content="http://yoursite.com/2016/06/24/CentOS安装RocketMQ和Jstorm/index.html">
+<meta property="og:site_name" content="六木">
+<meta property="og:description" content="CentOS 安装 RocketMQ
+安装git(非必须)：yum install git 安装 git 
+下载安装java：从oracle 网站上用 wget 下载命令:(下载版本可以更改)--no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelice">
+<meta property="og:updated_time" content="2016-07-12T13:17:42.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="六木">
+<meta name="twitter:description" content="CentOS 安装 RocketMQ
+安装git(非必须)：yum install git 安装 git 
+下载安装java：从oracle 网站上用 wget 下载命令:(下载版本可以更改)--no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelice">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>  | 六木 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">六木</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">君子之泽，五世而斩</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-24T17:22:44+08:00" content="2016-06-24">
+              2016-06-24
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CentOS-安装-RocketMQ"><a href="#CentOS-安装-RocketMQ" class="headerlink" title="CentOS 安装 RocketMQ"></a>CentOS 安装 RocketMQ</h1><ol>
+<li>安装git(非必须)：yum install git 安装 git </li>
+<li>下载安装java：从oracle 网站上用 wget 下载命令:(下载版本可以更改)<figure class="highlight plain"><figcaption><span>--no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u51-b13/jdk-7u51-linux-x64.tar.gz" ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">解压缩到 /opt/ ```tar xvf jdk-7u51-linux-x64.tar.gz -C /opt/ ```然后将文件夹修改名称``` ln -s /opt/jdk1.7.0_67 /opt/jdk ```。之后就是配置环境变量，在 /etc/profile 最后添加</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>export JAVA_HOME=/opt/jdk<br>export PATH=$JAVA_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使变量生效``` source /etc/profile ```，之后验证 JAVA 安装情况。</span><br><span class="line">3. 下载配置 RocketMQ：首先下载 RocketMQ3.2.6。```wget https://github.com/alibaba/RocketMQ/releases/download/v3.2.6/alibaba-rocketmq-3.2.6.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>解压缩到 /opt/ <figure class="highlight plain"><figcaption><span>xvf alibaba-rocketmq-3.2.6.tar.gz -C</span><a href="/opt/">```</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">。之后也需要配置环境变量，在 /etc/profile 最后添加，配置后结果如下：</span><br></pre></td></tr></table></figure></p>
+<p>export JAVA_HOME=/opt/jdk<br>export ROCKETMQ_HOME=/opt/alibaba-rocketmq<br>export PATH=$JAVA_HOME/bin:$ROCKETMQ_HOME/bin:$PATH<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">4. 启动 RocketMQ nameserver, broker. 这一步还需要在研究一下。基本配置完成。</span><br><span class="line">参考链接：[RocketMQ 消息队列简单部署](http://www.faceye.net/search/119958.html#bottom-ad)</span><br><span class="line">[RocketMQ 安装和测试](http://blog.csdn.net/zhu_tianwei/article/details/40948447)</span><br><span class="line"></span><br><span class="line"># CentOS 安装 Jstorm</span><br><span class="line">1. Jstorm下载：```wget http://42.121.19.155/jstorm/jstorm-2.1.1.zip```。下载的是 zip</span><br><span class="line"> 压缩包，因此需要确定 CentOS 有无安装 unzip，没有的话执行``` yum install zip unzip -y ```安装，否则无法解压。</span><br><span class="line">2. Zookeeper安装和配置：首先下载 Zookeeper，```wget http://apache.fayea.com/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz```。解压缩到 /opt/ ```tar xvf zookeeper-3.4.6.tar.gz -C /opt/ ```。之后配置环境变量，在 /etc/profile 最后添加</span><br></pre></td></tr></table></figure></p>
+<p>export ZOOKEEPER_HOME=/opt/zookeeper-3.4.6<br>export PATH=$ZOOKEEPER_HOME/bin<br>export CLASSPATH=$ZOOKEEPER_HOME/lib<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">环境变量配置完成之后配置 Zookeeper 的 cfg 文件，配置文件存放在 $ZOOKEEPER_HOME/conf/目录下，将zoo_sample.cfg文件名称改为zoo.cfg。配置文件如下：</span><br></pre></td></tr></table></figure></p>
+<h1 id="The-number-of-milliseconds-of-each-tick"><a href="#The-number-of-milliseconds-of-each-tick" class="headerlink" title="The number of milliseconds of each tick"></a>The number of milliseconds of each tick</h1><p>tickTime=2000</p>
+<h1 id="The-number-of-ticks-that-the-initial"><a href="#The-number-of-ticks-that-the-initial" class="headerlink" title="The number of ticks that the initial"></a>The number of ticks that the initial</h1><h1 id="synchronization-phase-can-take"><a href="#synchronization-phase-can-take" class="headerlink" title="synchronization phase can take"></a>synchronization phase can take</h1><p>initLimit=10</p>
+<h1 id="The-number-of-ticks-that-can-pass-between"><a href="#The-number-of-ticks-that-can-pass-between" class="headerlink" title="The number of ticks that can pass between"></a>The number of ticks that can pass between</h1><h1 id="sending-a-request-and-getting-an-acknowledgement"><a href="#sending-a-request-and-getting-an-acknowledgement" class="headerlink" title="sending a request and getting an acknowledgement"></a>sending a request and getting an acknowledgement</h1><p>syncLimit=5</p>
+<h1 id="the-directory-where-the-snapshot-is-stored"><a href="#the-directory-where-the-snapshot-is-stored" class="headerlink" title="the directory where the snapshot is stored."></a>the directory where the snapshot is stored.</h1><h1 id="do-not-use-tmp-for-storage-tmp-here-is-just"><a href="#do-not-use-tmp-for-storage-tmp-here-is-just" class="headerlink" title="do not use /tmp for storage, /tmp here is just"></a>do not use /tmp for storage, /tmp here is just</h1><h1 id="example-sakes"><a href="#example-sakes" class="headerlink" title="example sakes."></a>example sakes.</h1><p>dataDir=/opt/zookeeper-3.4.6/data #暂时就修改这一行</p>
+<h1 id="the-port-at-which-the-clients-will-connect"><a href="#the-port-at-which-the-clients-will-connect" class="headerlink" title="the port at which the clients will connect"></a>the port at which the clients will connect</h1><p>clientPort=2181<br>#</p>
+<h1 id="Be-sure-to-read-the-maintenance-section-of-the"><a href="#Be-sure-to-read-the-maintenance-section-of-the" class="headerlink" title="Be sure to read the maintenance section of the"></a>Be sure to read the maintenance section of the</h1><h1 id="administrator-guide-before-turning-on-autopurge"><a href="#administrator-guide-before-turning-on-autopurge" class="headerlink" title="administrator guide before turning on autopurge."></a>administrator guide before turning on autopurge.</h1><p>#</p>
+<h1 id="http-zookeeper-apache-org-doc-current-zookeeperAdmin-html-sc-maintenance"><a href="#http-zookeeper-apache-org-doc-current-zookeeperAdmin-html-sc-maintenance" class="headerlink" title="http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance"></a><a href="http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance" target="_blank" rel="external">http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance</a></h1><p>#</p>
+<h1 id="The-number-of-snapshots-to-retain-in-dataDir"><a href="#The-number-of-snapshots-to-retain-in-dataDir" class="headerlink" title="The number of snapshots to retain in dataDir"></a>The number of snapshots to retain in dataDir</h1><p>#autopurge.snapRetainCount=3</p>
+<h1 id="Purge-task-interval-in-hours"><a href="#Purge-task-interval-in-hours" class="headerlink" title="Purge task interval in hours"></a>Purge task interval in hours</h1><h1 id="Set-to-“0”-to-disable-auto-purge-feature"><a href="#Set-to-“0”-to-disable-auto-purge-feature" class="headerlink" title="Set to “0” to disable auto purge feature"></a>Set to “0” to disable auto purge feature</h1><p>#autopurge.purgeInterval=1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">配置说明：</span><br><span class="line">tickTime：这个时间是作为 Zookeeper  服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。</span><br><span class="line">dataDir：顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。</span><br><span class="line">clientPort：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。</span><br><span class="line">当这些配置项配置好后，你现在就可以启动zookeeper了：</span><br></pre></td></tr></table></figure></p>
+<p>:~/ netstat -at|grep 2181 #查看zookeeper端口<br>:~/ netstat -nat #查看端口信息<br>:~/opt/zookeeper-3.4.6/bin$ ./zkServer.sh start #启动<br>:~/opt/zookeeper-3.4.6/bin$ jps #查看启动的服务名称<br>:~/opt/zookeeper-3.4.6/bin$ ./zkServer.sh stop #关闭<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">启动后要检查 Zookeeper 是否已经在服务，可以通过 netstat -at|grep 2181 命令查看是否有 clientPort 端口号在监听服务。</span><br><span class="line">参考链接：[ZooKeeper安装与配置](http://www.cnblogs.com/linjiqin/archive/2013/03/16/2962597.html)</span><br><span class="line">[ZooKeeper的部署以及简单使用](http://blog.csdn.net/hi_kevin/article/details/7089358)</span><br><span class="line">[Zookeeper集群环境安装过程详解](http://blog.csdn.net/cruise_h/article/details/19046357)</span><br><span class="line">3. 安装 Jstorm ，Python 在 Linux 下基本都已经安装，可以确定一下版本。之前已经下载过 Jstorm，这里讲它解压到 /opt/ 下，使用：``` unzip jstorm-2.1.1.zip -d /opt/ ```然后和前类似，配置环境变量，在 /etc/profile 最后添加</span><br></pre></td></tr></table></figure></p>
+<p>export JSTORM_HOME=/opt/jstorm-2.1.1<br>export PATH=$PATH:$JSTORM_HOME/bin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">别忘了 source 使变量生效。</span><br><span class="line">随后配置$JSTORM_HOME/conf/storm.yaml</span><br><span class="line">配置项：</span><br></pre></td></tr></table></figure></p>
+<p>storm.zookeeper.servers: 表示zookeeper 的地址，<br>nimbus.host: 表示nimbus的地址<br>storm.zookeeper.root: 表示JStorm在zookeeper中的根目录，当多个JStorm共享一个zookeeper时，需要设置该选项，默认即为“/jstorm”<br>storm.local.dir: 表示JStorm临时数据存放目录，需要保证JStorm程序对该目录有写权限<br>java.library.path: Zeromq 和java zeromq library的安装目录，默认”/usr/local/lib:/opt/local/lib:/usr/lib”<br>supervisor.slots.ports: 表示Supervisor 提供的端口Slot列表，注意不要和其他端口发生冲突，默认是68xx，而Storm的是67xx<br>topology.enable.classloader: false, 默认关闭classloader，如果应用的jar与JStorm的依赖的jar发生冲突，比如应用使用thrift9，但jstorm使用thrift7时，就需要打开classloader。建议在集群级别上默认关闭，在具体需要隔离的topology上打开这个选项。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">拷贝拷贝 storm.yaml，执行</span><br></pre></td></tr></table></figure></p>
+<p>mkdir ~/.jstorm<br>cp -f $JSTORM_HOME/conf/storm.yaml ~/.jstorm<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">4. 安装JStorm Web UI，必须使用tomcat 7.0 或以上版本，这里使用的是 apache-tomcat-7.0.70，下载apache-tomcat-7.0.70，下载完稍微配置一下就可以启动 Web-UI：</span><br><span class="line">``` wget http://apache.fayea.com/tomcat/tomcat-7/v7.0.70/bin/apache-tomcat-7.0.70.tar.gz</span><br><span class="line">tar -xvf apache-tomcat-7.0.70.tar.gz -C /opt/</span><br><span class="line">cd apache-tomcat-7.0.70</span><br><span class="line">cd webapps</span><br><span class="line">cp $JSTORM_HOME/jstorm-ui-2.1.1.war ./</span><br><span class="line">mv ROOT ROOT.old</span><br><span class="line">ln -s jstorm-ui-2.1.1 ROOT           这个地方可能变化，是根据你的JStorm版本来确定，比如当0.9.6.1时，是ln -s jstorm-0.9.6.1 ROOT</span><br><span class="line">另外不是 ln -s jstorm-ui-0.9.6.3.war ROOT 这个要小心</span><br><span class="line">cd ../bin</span><br><span class="line">./startup.sh</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>启动JStorm，在nimbus 节点上执行 “nohup jstorm nimbus &amp;”, 查看$JSTORM_HOME/logs/nimbus.log检查有无错误。在supervisor节点上执行 “nohup jstorm supervisor &amp;”, 查看$JSTORM_HOME/logs/supervisor.log检查有无错误。这一步执行除了问题，还需要在理一下思路。<br>参考链接：<a href="https://github.com/alibaba/jstorm/wiki/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85" target="_blank" rel="external">官方文档</a></li>
+</ol>
+<h1 id="CentOS-下安装Maven"><a href="#CentOS-下安装Maven" class="headerlink" title="CentOS 下安装Maven"></a>CentOS 下安装Maven</h1><ol>
+<li>官网找到最新版的安装包：<a href="http://maven.apache.org/download.cgi" target="_blank" rel="external">http://maven.apache.org/download.cgi</a></li>
+<li>下载并解压到制定目录 <figure class="highlight plain"><figcaption><span>http://mirrors.hust.edu.cn/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz tar -xvf apache-maven-3.3.9-bin.tar.gz -C</span><a href="/opt/```">link</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3. 配置环境变量，验证是否安装成功``` vi /etc/profile; export M2_HOME=/usr/local/apache-maven; </span><br><span class="line">export PATH=$PATH:$M2_HOME/bin; source /etc/profilep;mvn -version</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><a href="https://code.aliyun.com/MiddlewareRace/PreliminaryDemo.git" target="_blank" rel="external">https://code.aliyun.com/MiddlewareRace/PreliminaryDemo.git</a><br>启动生产者生产数据：java -Drocketmq.namesrv.addr=127.0.0.1:9876 -cp preliminary.demo-1.0-SNAPSHOT.jar com.alibaba.middleware.race.rocketmq.Producer<br>启动消费者消费数据：java -Drocketmq.namesrv.addr=127.0.0.1:9876 -cp preliminary.demo-1.0-SNAPSHOT.jar com.alibaba.middleware.race.rocketmq.Consumer</p>
+<p>export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin</p>
+<h2 id="Jstorm-集群安装配置"><a href="#Jstorm-集群安装配置" class="headerlink" title="Jstorm 集群安装配置"></a>Jstorm 集群安装配置</h2><p><a href="http://m.blog.chinaunix.net/uid-20776139-id-5566632.html" target="_blank" rel="external">http://m.blog.chinaunix.net/uid-20776139-id-5566632.html</a></p>
+<p><a href="https://www.zhihu.com/question/29998840" target="_blank" rel="external">https://www.zhihu.com/question/29998840</a></p>
+<p><a href="http://blog.csdn.net/u013619834/article/details/46390417" target="_blank" rel="external">http://blog.csdn.net/u013619834/article/details/46390417</a></p>
+<p><a href="http://blog.csdn.net/jianghuxiaojin/article/details/51550248" target="_blank" rel="external">http://blog.csdn.net/jianghuxiaojin/article/details/51550248</a></p>
+<p>linux下IPTABLES配置详解：<br><a href="http://www.cnblogs.com/JemBai/archive/2009/03/19/1416364.html" target="_blank" rel="external">http://www.cnblogs.com/JemBai/archive/2009/03/19/1416364.html</a></p>
+<p>sublime 使用：<br><a href="http://guowenfh.github.io/2015/12/26/SublimeText/" target="_blank" rel="external">http://guowenfh.github.io/2015/12/26/SublimeText/</a></p>
+<p>spout如何和RocketMq 建立消费连接的例子：<br><a href="https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq" target="_blank" rel="external">https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq</a></p>
+<p><a href="https://bbs.aliyun.com/read/283102.html?spm=5176.bbsl254.0.0.iRhRmk" target="_blank" rel="external">https://bbs.aliyun.com/read/283102.html?spm=5176.bbsl254.0.0.iRhRmk</a></p>
+<p><a href="http://m.blog.chinaunix.net/uid-20776139-id-5566632.html" target="_blank" rel="external">http://m.blog.chinaunix.net/uid-20776139-id-5566632.html</a></p>
+<p><a href="http://shiyanjun.cn/archives/1019.html" target="_blank" rel="external">http://shiyanjun.cn/archives/1019.html</a></p>
+<p><a href="https://bbs.aliyun.com/read/283502.html?spm=5176.bbsl254.0.0.KoUyS8" target="_blank" rel="external">https://bbs.aliyun.com/read/283502.html?spm=5176.bbsl254.0.0.KoUyS8</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/24/tair学习/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/25/RocketMQ学习/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o86r9i8nc.bkt.clouddn.com/%E6%8D%95%E8%8E%B7.PNG"
+               alt="yuansen du" />
+          <p class="site-author-name" itemprop="name">yuansen du</p>
+          <p class="site-description motion-element" itemprop="description">做最好的自己</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dysenustc" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CentOS-安装-RocketMQ"><span class="nav-number">1.</span> <span class="nav-text">CentOS 安装 RocketMQ</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-number-of-milliseconds-of-each-tick"><span class="nav-number">2.</span> <span class="nav-text">The number of milliseconds of each tick</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-number-of-ticks-that-the-initial"><span class="nav-number">3.</span> <span class="nav-text">The number of ticks that the initial</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#synchronization-phase-can-take"><span class="nav-number">4.</span> <span class="nav-text">synchronization phase can take</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-number-of-ticks-that-can-pass-between"><span class="nav-number">5.</span> <span class="nav-text">The number of ticks that can pass between</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sending-a-request-and-getting-an-acknowledgement"><span class="nav-number">6.</span> <span class="nav-text">sending a request and getting an acknowledgement</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-directory-where-the-snapshot-is-stored"><span class="nav-number">7.</span> <span class="nav-text">the directory where the snapshot is stored.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#do-not-use-tmp-for-storage-tmp-here-is-just"><span class="nav-number">8.</span> <span class="nav-text">do not use /tmp for storage, /tmp here is just</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#example-sakes"><span class="nav-number">9.</span> <span class="nav-text">example sakes.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-port-at-which-the-clients-will-connect"><span class="nav-number">10.</span> <span class="nav-text">the port at which the clients will connect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Be-sure-to-read-the-maintenance-section-of-the"><span class="nav-number">11.</span> <span class="nav-text">Be sure to read the maintenance section of the</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#administrator-guide-before-turning-on-autopurge"><span class="nav-number">12.</span> <span class="nav-text">administrator guide before turning on autopurge.</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http-zookeeper-apache-org-doc-current-zookeeperAdmin-html-sc-maintenance"><span class="nav-number">13.</span> <span class="nav-text">http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-number-of-snapshots-to-retain-in-dataDir"><span class="nav-number">14.</span> <span class="nav-text">The number of snapshots to retain in dataDir</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Purge-task-interval-in-hours"><span class="nav-number">15.</span> <span class="nav-text">Purge task interval in hours</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set-to-“0”-to-disable-auto-purge-feature"><span class="nav-number">16.</span> <span class="nav-text">Set to “0” to disable auto purge feature</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CentOS-下安装Maven"><span class="nav-number">17.</span> <span class="nav-text">CentOS 下安装Maven</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jstorm-集群安装配置"><span class="nav-number">17.1.</span> <span class="nav-text">Jstorm 集群安装配置</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yuansen du</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="storm 事务拓扑所有话题和它们在tweets中出现的次数列表&amp;emsp;&amp;emsp;TweetsTransactionalSpout会连接你的tweet数据库并向拓扑分发批次。UserSplitterBolt和HashTagSplitterBolt两个bolt，从spout接收元组。UserSplitterBolt解析tweets并查找用户——以@开头的单词——然后把这些单词分发到名为user">
+<meta property="og:type" content="article">
+<meta property="og:title" content="六木">
+<meta property="og:url" content="http://yoursite.com/2016/06/30/storm事务性拓扑/index.html">
+<meta property="og:site_name" content="六木">
+<meta property="og:description" content="storm 事务拓扑所有话题和它们在tweets中出现的次数列表&amp;emsp;&amp;emsp;TweetsTransactionalSpout会连接你的tweet数据库并向拓扑分发批次。UserSplitterBolt和HashTagSplitterBolt两个bolt，从spout接收元组。UserSplitterBolt解析tweets并查找用户——以@开头的单词——然后把这些单词分发到名为user">
+<meta property="og:image" content="http://o86r9i8nc.bkt.clouddn.com/tw%E6%8B%93%E6%89%91.png">
+<meta property="og:image" content="http://o86r9i8nc.bkt.clouddn.com/TridentTopology.png">
+<meta property="og:updated_time" content="2016-07-08T14:44:54.845Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="六木">
+<meta name="twitter:description" content="storm 事务拓扑所有话题和它们在tweets中出现的次数列表&amp;emsp;&amp;emsp;TweetsTransactionalSpout会连接你的tweet数据库并向拓扑分发批次。UserSplitterBolt和HashTagSplitterBolt两个bolt，从spout接收元组。UserSplitterBolt解析tweets并查找用户——以@开头的单词——然后把这些单词分发到名为user">
+<meta name="twitter:image" content="http://o86r9i8nc.bkt.clouddn.com/tw%E6%8B%93%E6%89%91.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>  | 六木 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">六木</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">君子之泽，五世而斩</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-30T11:02:30+08:00" content="2016-06-30">
+              2016-06-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="storm-事务拓扑"><a href="#storm-事务拓扑" class="headerlink" title="storm 事务拓扑"></a>storm 事务拓扑</h1><h2 id="所有话题和它们在tweets中出现的次数列表"><a href="#所有话题和它们在tweets中出现的次数列表" class="headerlink" title="所有话题和它们在tweets中出现的次数列表"></a>所有话题和它们在tweets中出现的次数列表</h2><div align="center"><br><img src="http://o86r9i8nc.bkt.clouddn.com/tw%E6%8B%93%E6%89%91.png" alt="Producer"><br></div><br>&emsp;&emsp;TweetsTransactionalSpout会连接你的tweet数据库并向拓扑分发批次。UserSplitterBolt和HashTagSplitterBolt两个bolt，从spout接收元组。UserSplitterBolt解析tweets并查找用户——以@开头的单词——然后把这些单词分发到名为users的自定义数据流组。HashtagSplitterBolt从tweet查找#开头的单词，并把它们分发到名为hashtags的自定义数据流组。第三个bolt，UserHashtagJoinBolt，接收前面提到的两个数据流组，并计算具名用户的一条tweet内的话题数量。为了计数并分发计算结果，这是个BaseBatchBolt（稍后有更多介绍）。<br>最后一个bolt——RedisCommitterBolt——接收以上三个bolt的数据流组。它为每样东西计数，并在对一个批次完成处理时，把所有结果保存到redis。这是一种特殊的bolt，叫做提交者，在本章后面做更多讲解。<br>用TransactionalTopologyBuilder构建拓扑，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">TransactionalTopologyBuilder builder=</span><br><span class="line">    new TransactionalTopologyBuilder(&quot;test&quot;, &quot;spout&quot;, new TweetsTransactionalSpout());</span><br><span class="line"></span><br><span class="line">builder.setBolt(&quot;users-splitter&quot;, new UserSplitterBolt(), 4).shuffleGrouping(&quot;spout&quot;);</span><br><span class="line">buildeer.setBolt(&quot;hashtag-splitter&quot;, new HashtagSplitterBolt(), 4).shuffleGrouping(&quot;spout&quot;);</span><br><span class="line"></span><br><span class="line">builder.setBolt(&quot;users-hashtag-manager&quot;, new UserHashtagJoinBolt(), r)</span><br><span class="line">       .fieldsGrouping(&quot;users-splitter&quot;, &quot;users&quot;, new Fields(&quot;tweet_id&quot;))</span><br><span class="line">       .fieldsGrouping(&quot;hashtag-splitter&quot;, &quot;hashtags&quot;, new Fields(&quot;tweet_id&quot;));</span><br><span class="line"></span><br><span class="line">builder.setBolt(&quot;redis-commiter&quot;, new RedisCommiterBolt())</span><br><span class="line">       .globalGrouping(&quot;users-splitter&quot;, &quot;users&quot;)</span><br><span class="line">       .globalGrouping(&quot;hashtag-splitter&quot;, &quot;hashtags&quot;)</span><br><span class="line">       .globalGrouping(&quot;user-hashtag-merger&quot;);</span><br></pre></td></tr></table></figure><br><br>接下来就看看如何在一个事务性拓扑中实现spout。<br>Spout<br>一个事务性拓扑的spout与标准spout完全不同。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class TweetsTransactionalSpout extends BaseTransactionalSpout&lt;TransactionMetadata&gt;&#123;&#125;</span><br></pre></td></tr></table></figure><br><br>正如你在这个类定义中看到的，TweetsTransactionalSpout继承了带范型的BaseTransactionalSpout。指定的范型类型的对象是事务元数据集合。它将在后面的代码中用于从数据源分发批次。<br><br>## Trident Topology 执行<br><br><div align="center"><br><img src="http://o86r9i8nc.bkt.clouddn.com/TridentTopology.png" alt="Producer"><br></div>
+
+<p>MasterBatchCoordinator通过Batch_stream_id来发送通知给TridentSpoutExecutor<br>TridentSpoutExecutor收到通知发送成批的tuple给下一跳的Bolt<br>下一跳的Bolt收到tuple之后，使用TridentBoltExecutor来进行处理<br>TridentBoltExecutor调用SubtopologyBolt::execute<br>InitialReceiver::execute被调用<br>TridentProcessor::execute被调用<br>MasterBatchCoordinator收到ack之后，会发送success消息给Spout<br>MasterBatchCoordinator在commit的时候，会发送commit消息给Spout，让Spout将缓存的消息删除</p>
+<p>之前我们约定：每个拓扑的总计算资源是6核/12G内存，拓扑运行的最大worker数量不超过4个，每个worker的默认内存大小是3G, 默认的运行CPU核是1个。 这些都是一个大致的计算资源，其实我们后台并没有开cgroup，并没有严格限制每个worker具体的计算资源。我们只是保证每个选手的拓扑只会运行在一台6核/12G的机器上，且这台机器在同一时段只能有一个拓扑在运行。所以保证了每个拓扑的计算资源是是6核12G。</p>
+<p>我们比赛要求选手最多可利用worker数量是4个，并没有要求每个worker最多可配置task数量。每个worker内含的task数量，可有选手自己配置。但不是task越多，性能就好。我们建议每个worker内含的task数量，最多不要超过6个。如果task过多，其实性能不一定好。同时worker资源就那么多，task越多，可能对worker压力比较大，容易造成worker full gc 或者其他种种情况。</p>
+<p>OrderMessage{orderId=1467293990872, buyerId=’buyer7937’, productId=’product1114’, salerId=’tm_saler9313’, createTime=1467293992865, totalPrice=26119.38}<br>PaymentMessage{orderId=1467293990871, payAmount=53938.990000000005, paySource=1, payPlatform=1, createTime=1467293992924}</p>
+<h2 id="Jstorm-Trident-topology-资料"><a href="#Jstorm-Trident-topology-资料" class="headerlink" title="Jstorm Trident topology 资料"></a>Jstorm Trident topology 资料</h2><p>流合并：<br><a href="http://www.it610.com/article/3755763.htm" target="_blank" rel="external">http://www.it610.com/article/3755763.htm</a></p>
+<p><a href="http://blog.sina.com.cn/s/blog_7ea3d46f0101ligy.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_7ea3d46f0101ligy.html</a><br><a href="http://ifeve.com/getting-started-of-storm8/" target="_blank" rel="external">http://ifeve.com/getting-started-of-storm8/</a><br><a href="http://qifuguang.me/2015/11/27/Storm%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3-Trident%E6%95%99%E7%A8%8B/" target="_blank" rel="external">http://qifuguang.me/2015/11/27/Storm%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3-Trident%E6%95%99%E7%A8%8B/</a><br><a href="http://blog.csdn.net/derekjiang/article/details/9126185" target="_blank" rel="external">http://blog.csdn.net/derekjiang/article/details/9126185</a></p>
+<h2 id="GIthub-Trident-tutorial"><a href="#GIthub-Trident-tutorial" class="headerlink" title="GIthub Trident tutorial"></a>GIthub Trident tutorial</h2><p>trident-tutorial:<br><a href="https://github.com/eshioji/trident-tutorial" target="_blank" rel="external">https://github.com/eshioji/trident-tutorial</a><br>storm-trident:<br><a href="https://github.com/cjie888/storm-trident" target="_blank" rel="external">https://github.com/cjie888/storm-trident</a><br>storm-starter<br><a href="https://github.com/nathanmarz/storm-starter" target="_blank" rel="external">https://github.com/nathanmarz/storm-starter</a></p>
+<h2 id="trident-topology可靠性分析"><a href="#trident-topology可靠性分析" class="headerlink" title="trident topology可靠性分析"></a>trident topology可靠性分析</h2><p><a href="http://blog.chinaunix.net/uid-26253719-id-4063664.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-26253719-id-4063664.html</a></p>
+<h2 id="Trident-Topology执行过程分析"><a href="#Trident-Topology执行过程分析" class="headerlink" title="Trident Topology执行过程分析"></a>Trident Topology执行过程分析</h2><p><a href="http://blog.chinaunix.net/uid-26253719-id-4063679.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-26253719-id-4063679.html</a></p>
+<h2 id="worker进程内部消息传递处理和数据结构分析"><a href="#worker进程内部消息传递处理和数据结构分析" class="headerlink" title="worker进程内部消息传递处理和数据结构分析"></a>worker进程内部消息传递处理和数据结构分析</h2><p><a href="http://blog.chinaunix.net/uid-26253719-id-4063695.html" target="_blank" rel="external">http://blog.chinaunix.net/uid-26253719-id-4063695.html</a></p>
+<h2 id="Storm之trident聚合操作介绍"><a href="#Storm之trident聚合操作介绍" class="headerlink" title="Storm之trident聚合操作介绍"></a>Storm之trident聚合操作介绍</h2><p><a href="http://blog.sina.com.cn/s/blog_6ff05a2c0101k6xj.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_6ff05a2c0101k6xj.html</a></p>
+<h2 id="storm-函数API"><a href="#storm-函数API" class="headerlink" title="storm 函数API"></a>storm 函数API</h2><p><a href="http://nathanmarz.github.io/storm/doc-0.8.1/index.html?overview-summary.html" target="_blank" rel="external">http://nathanmarz.github.io/storm/doc-0.8.1/index.html?overview-summary.html</a></p>
+<h2 id="Storm-的消息格式"><a href="#Storm-的消息格式" class="headerlink" title="Storm 的消息格式"></a>Storm 的消息格式</h2><p><a href="http://blog.csdn.net/lujinhong2/article/details/50999786" target="_blank" rel="external">http://blog.csdn.net/lujinhong2/article/details/50999786</a></p>
+<h2 id="Git-使用技巧"><a href="#Git-使用技巧" class="headerlink" title="Git 使用技巧"></a>Git 使用技巧</h2><p><a href="http://www.oschina.net/translate/git-fetch-and-merge?cmp" target="_blank" rel="external">http://www.oschina.net/translate/git-fetch-and-merge?cmp</a></p>
+<p><a href="http://ali-middleware-race.oss-cn-shanghai.aliyuncs.com/{TeamCode}.tar.xz" target="_blank" rel="external">http://ali-middleware-race.oss-cn-shanghai.aliyuncs.com/{TeamCode}.tar.xz</a></p>
+<p><a href="http://www.cnblogs.com/benio/archive/2010/10/13/1849946.html" target="_blank" rel="external">http://www.cnblogs.com/benio/archive/2010/10/13/1849946.html</a></p>
+<p><a href="http://www.cnblogs.com/mingforyou/archive/2012/03/03/2378143.html" target="_blank" rel="external">http://www.cnblogs.com/mingforyou/archive/2012/03/03/2378143.html</a></p>
+<p>find / -size +100M -exec ls -lh {} \;</p>
+<p><a href="http://ali-middleware-race.oss-cn-shanghai.aliyuncs.com/44727r5953.tar.xz" target="_blank" rel="external">http://ali-middleware-race.oss-cn-shanghai.aliyuncs.com/44727r5953.tar.xz</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/25/生产力工具/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/12/新浪微博预测/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o86r9i8nc.bkt.clouddn.com/%E6%8D%95%E8%8E%B7.PNG"
+               alt="yuansen du" />
+          <p class="site-author-name" itemprop="name">yuansen du</p>
+          <p class="site-description motion-element" itemprop="description">做最好的自己</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dysenustc" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#storm-事务拓扑"><span class="nav-number">1.</span> <span class="nav-text">storm 事务拓扑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#所有话题和它们在tweets中出现的次数列表"><span class="nav-number">1.1.</span> <span class="nav-text">所有话题和它们在tweets中出现的次数列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jstorm-Trident-topology-资料"><span class="nav-number">1.2.</span> <span class="nav-text">Jstorm Trident topology 资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIthub-Trident-tutorial"><span class="nav-number">1.3.</span> <span class="nav-text">GIthub Trident tutorial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trident-topology可靠性分析"><span class="nav-number">1.4.</span> <span class="nav-text">trident topology可靠性分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trident-Topology执行过程分析"><span class="nav-number">1.5.</span> <span class="nav-text">Trident Topology执行过程分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#worker进程内部消息传递处理和数据结构分析"><span class="nav-number">1.6.</span> <span class="nav-text">worker进程内部消息传递处理和数据结构分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm之trident聚合操作介绍"><span class="nav-number">1.7.</span> <span class="nav-text">Storm之trident聚合操作介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#storm-函数API"><span class="nav-number">1.8.</span> <span class="nav-text">storm 函数API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Storm-的消息格式"><span class="nav-number">1.9.</span> <span class="nav-text">Storm 的消息格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-使用技巧"><span class="nav-number">1.10.</span> <span class="nav-text">Git 使用技巧</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yuansen du</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>

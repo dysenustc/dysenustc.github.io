@@ -1,0 +1,680 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="spout如何和RocketMq 建立消费连接的例子：https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq
+基本概念ProducerGroup&amp;emsp;&amp;emsp;通常具有同样属性（处理的消息种类 topic、以及消息处理逻辑流程—分布式多个客户端）的一些 producer 可以归为同一个 gr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="六木">
+<meta property="og:url" content="http://yoursite.com/2016/06/25/RocketMQ学习/index.html">
+<meta property="og:site_name" content="六木">
+<meta property="og:description" content="spout如何和RocketMq 建立消费连接的例子：https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq
+基本概念ProducerGroup&amp;emsp;&amp;emsp;通常具有同样属性（处理的消息种类 topic、以及消息处理逻辑流程—分布式多个客户端）的一些 producer 可以归为同一个 gr">
+<meta property="og:image" content="http://o86r9i8nc.bkt.clouddn.com/RocketMQ%E6%A1%86%E6%9E%B6.PNG">
+<meta property="og:image" content="http://o86r9i8nc.bkt.clouddn.com/RocketMQProducer.PNG">
+<meta property="og:image" content="http://o86r9i8nc.bkt.clouddn.com/RocketMQConsumer.PNG">
+<meta property="og:updated_time" content="2016-06-25T06:47:40.739Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="六木">
+<meta name="twitter:description" content="spout如何和RocketMq 建立消费连接的例子：https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq
+基本概念ProducerGroup&amp;emsp;&amp;emsp;通常具有同样属性（处理的消息种类 topic、以及消息处理逻辑流程—分布式多个客户端）的一些 producer 可以归为同一个 gr">
+<meta name="twitter:image" content="http://o86r9i8nc.bkt.clouddn.com/RocketMQ%E6%A1%86%E6%9E%B6.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>  | 六木 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">六木</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">君子之泽，五世而斩</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-25T12:58:59+08:00" content="2016-06-25">
+              2016-06-25
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>spout如何和RocketMq 建立消费连接的例子：<a href="https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq" target="_blank" rel="external">https://github.com/alibaba/jstorm/tree/master/jstorm-utility/jstorm-rocket-mq</a></p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="ProducerGroup"><a href="#ProducerGroup" class="headerlink" title="ProducerGroup"></a>ProducerGroup</h2><p>&emsp;&emsp;通常具有同样属性（处理的消息种类 topic、以及消息处理逻辑流程—分布式多个客户端）的一些 producer 可以归为同一个 group。在事务消息机制中，如果发送某条消息的 producer-A 宕机，使得事务消息一直处于 PREPARED 状态并超时，则 broker 会回查 同一个 group 的其他 producer，确认这条消息应该 commit 还是 rollback。</p>
+<h2 id="ConsumerGroup"><a href="#ConsumerGroup" class="headerlink" title="ConsumerGroup"></a>ConsumerGroup</h2><p>&emsp;&emsp;具有同样逻辑消费同样消息的 consumer，可以归并为一个 group。同一个 group 内的消费者，可以共同消费（CLUSTERING）对应 topic 的消息，达到分布式并行处理的功能。</p>
+<h2 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h2><p>&emsp;&emsp;消息的逻辑管理单位。</p>
+<h2 id="Quene"><a href="#Quene" class="headerlink" title="Quene"></a>Quene</h2><p>&emsp;&emsp;消息的物理管理单位。一个 Topic 下可以有多个 Queue，Queue的引入使得消息存储可以分布式集群化，具有了水平扩展的能力。</p>
+<h2 id="消费进度管理"><a href="#消费进度管理" class="headerlink" title="消费进度管理"></a>消费进度管理</h2><p>&emsp;&emsp;RocketMQ 的 broker 端，不负责推送消息，无论消费者是否消费消息，都将消息存储起来。谁要消费消息，就向 broker 发请求获取消息，消费记录由 consumer 来维护。RocketMQ 提供了两种存储方式来保留消费记录：一种是保留在 consumer 所在的服务器上；另一种是保存在 broker 服务器上。用户还可以自己实现相应的消费进度存储接口。<br>默认情况下，采用集群消费（CLUSTERING），会将记录保存在 broker 端；而采用广播消费（BROADCASTING）则会将消费记录保存在本地。</p>
+<h2 id="顺序消息"><a href="#顺序消息" class="headerlink" title="顺序消息"></a>顺序消息</h2><p>&emsp;&emsp;用户实现 MessageQueueSelector 为某一批消息（通常是有同样的唯一的标示 ID ），选择同一个 Queue，则这一批消息的消费将是顺序消费（并由同一个 consumer 完成消费）。</p>
+<h2 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h2><p>&emsp;&emsp;这样的消息有多个状态，并且其发送是两阶段的。第一个阶段发送 PREPARED 状态的消息，此时 consumer 是看不见这种状态的消息的，发送完毕后回调用户的 TransactionExecutor 接口，执行相应的事务操作（如数据库），当事务操作成功时，则对此条消息返回commit，让 broker 对该消息执行 commit 操作，成为 commit 状态的消息对 consumer 是可见的。</p>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><h2 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h2><p>&emsp;&emsp;RocketMQ 以 Topic 来管理不同应用的消息。对于生产者而言，发送消息时，需要指定消息的 Topic, 对于消费者而言，在启动时，需要订阅相应的 Topic，然后可以消费相应的消息。Topic 是逻辑上的概念，在物理实现上，一个 Topic 由多个 Quene 组成，采用多个 Quene 的好处是可以将 Broker 存储分布式化，提高系统性能。</p>
+<p>&emsp;&emsp;RocketMQ 中，Producer 将消息发送给 Broker 时，需要指定发送到哪一个队列中，默认情况下，Preducer 会轮询的将消息发送到每个队列中(所有 Broker 下的 Quene 合并成一个 List 去轮询)。</p>
+<p>&emsp;&emsp;对于 Consumer 而言，会为每个 Consumer 分配固定的队列(如果队列总数没有发生变化)，Consumer 从固定的队列中去拉取没有消费的消息进行处理。<img src="http://o86r9i8nc.bkt.clouddn.com/RocketMQ%E6%A1%86%E6%9E%B6.PNG" alt="RocketMQ 框架"></p>
+<h2 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h2><p>&emsp;&emsp;Producer端（属于client）的逻辑概述：</p>
+<p><div align="center"><br><img src="http://o86r9i8nc.bkt.clouddn.com/RocketMQProducer.PNG" alt="Producer"><br></div><br>&emsp;&emsp;producer端的逻辑都比较简单，将消息发送到某个 Queue 中即可，具体发送到那个 Queue 可以由用户控制（MessageQueueSelector接口），默认情况下，将轮询方式选择 Queue。在 producer 端，会从 NameServer 将所有 Broker 的 Topic 及对应的 Queue 信息（即：TopicRoute信息）拉取到本地，然后根据&lt; brokerName， queueId &gt;组建成一个 List。因此在 MessageQueueSelector，可以看到所有的 Queue 信息。</p>
+<p>&emsp;&emsp;RocketMQ 将 Topic 的消息以多个 Queue 来管理，使得其较为容易的就可以进行水平扩展，提供系统吞吐力。这样分布带来的问题，就是从全局上不能做到顺序性（很多时候也并不需要全局上的顺序性）。</p>
+<p>&emsp;&emsp;提到 RocketMQ 支持顺序消息，实际上是指基于 Queue 级别的顺序。用户将某些需要满足顺序的一批消息（比如电商某个订单号的一系列后续操作、比如数据库的某个主键的 insert、delete、update 等操作）发送到固定的某个 Queue 中，则从这个 Queue 消费消息的 Consumer，针对这一批消息是顺序消费。</p>
+<h2 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h2><p>&ensp;&ensp;Consumer 逻辑稍微复杂一点。初步思考，Consumer 端至少需要处理：</p>
+<ol>
+<li>消息的获取；</li>
+<li>Offset(消费进度)的管理与存储；</li>
+<li>集群消费模式下，Quene 的分配问题(Rebalence)</li>
+</ol>
+<p>&ensp;&ensp;RocketMQ对外提供了两种不同形式的 Consumer：PushConsumer 和 PullConsumer。顾名思义，对于 PullConsumer 而言，用户需要主动调用相应的接口去拉取未消费的消息。对于 PushConsumer 而言，用户提供消息处理的 CallBack，有未曾消费的消息时，会主动回调这个 CallBack 来处理消息。虽从用户角度而言，Consumer 存在主动（pull）和被动（push），但 RocketMQ 本身的 Broker 端仅仅保存所有的消息，并不负责 push 消息，因此 PushConsumer 的底层实现也是有一个长连接主动去 Broker 上拉取未消费的消息，然后回调用户的 callback 逻辑。</p>
+<p>&ensp;&ensp;PushConsumer 端逻辑概述：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(“groupName”);</span><br><span class="line">consumer.subscribe(“TopicName”, “*”); // a | b | c</span><br><span class="line">consumer.registerMessageListener( new MessageListenerConcurrently() &#123;</span><br><span class="line">public ConsumeConcurrentlyStatus consumeMessage(List&lt;MessageExt&gt; msgs, </span><br><span class="line">                                  ConsumeConcurrentlyContext context) &#123;</span><br><span class="line">    System.out.println(“Consume Message Num: ” + msgs.size());</span><br><span class="line">    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br><span class="line">consumer.start();</span><br><span class="line">// add shutdown hook to execute consumer.shutdown();</span><br></pre></td></tr></table></figure></p>
+<p>&ensp;&ensp;第2行的 Subscribe 即订阅某个 Topic 下，符合某些标签（tag）的消息。这个过滤会在服务端过滤（其实在Consumer端也有过滤逻辑）。tag 之间用”|”分割开。这些 tag 会被解析成 SubscriptionData 来保存信息，主要存储 tag 的字符串集合，以及这些 tag 对应的 hashcode 集合(<font color="#0000FF">在broker端的存储和过滤其实都是tag值对应的hashcode，可能是为了加速过滤以及节约存储空间</font>)。</p>
+<p>&ensp;&ensp;主要的逻辑在第10行调用 start 函数之后开始。Consumer 的主要实现是 DefaultMQPushConsumerImpl，其包含的对象关系简单如下图：</p>
+<p><div align="center"><br><img src="http://o86r9i8nc.bkt.clouddn.com/RocketMQConsumer.PNG" alt="Consumer"><br></div><br>DefaultMQPushConsumerImpl 中各个对象的主要功能如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RebalancePushImpl：  主要负责决定，当前的consumer应该从哪些Queue中消费消息；</span><br><span class="line">PullAPIWrapper： 长连接，负责从broker处拉取消息，然后利用ConsumeMessageService回调用户的Listener执行消息消费逻辑；</span><br><span class="line">ConsumeMessageService：  实现所谓的“Push-被动”消费机制；从Broker拉取的消息后，封装成ConsumeRequest提交给ConsumeMessageSerivce，此service负责回调用户的Listener消费消息；</span><br><span class="line">OffsetStore：    维护当前consumer的消费记录（offset）；有两种实现，Local和Rmote，Local存储在本地磁盘上，适用于BROADCASTING广播消费模式；而Remote则将消费进度存储在Broker上，适用于CLUSTERING集群消费模式；</span><br><span class="line">MQClientFactory：    大杂烩，负责管理client（consumer、producer），并提供多中功能接口供各个Service（Rebalance、PullMessage等）调用；大部分逻辑均在这个类中完成</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/24/CentOS安装RocketMQ和Jstorm/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/25/生产力工具/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o86r9i8nc.bkt.clouddn.com/%E6%8D%95%E8%8E%B7.PNG"
+               alt="yuansen du" />
+          <p class="site-author-name" itemprop="name">yuansen du</p>
+          <p class="site-description motion-element" itemprop="description">做最好的自己</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/dysenustc" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ProducerGroup"><span class="nav-number">1.1.</span> <span class="nav-text">ProducerGroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConsumerGroup"><span class="nav-number">1.2.</span> <span class="nav-text">ConsumerGroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic"><span class="nav-number">1.3.</span> <span class="nav-text">Topic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quene"><span class="nav-number">1.4.</span> <span class="nav-text">Quene</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消费进度管理"><span class="nav-number">1.5.</span> <span class="nav-text">消费进度管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#顺序消息"><span class="nav-number">1.6.</span> <span class="nav-text">顺序消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务消息"><span class="nav-number">1.7.</span> <span class="nav-text">事务消息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">2.</span> <span class="nav-text">基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总览"><span class="nav-number">2.1.</span> <span class="nav-text">总览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Producer"><span class="nav-number">2.2.</span> <span class="nav-text">Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer"><span class="nav-number">2.3.</span> <span class="nav-text">Consumer</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yuansen du</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+
+  
+
+</body>
+</html>
